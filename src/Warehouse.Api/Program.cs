@@ -1,7 +1,6 @@
 using Application.MappingProfiles;
 using Infrastructure.MappingProfiles;
 using Mapster;
-using MapsterMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -12,4 +12,5 @@ public interface IIncomeDocumentRepository
     Task DeleteAsync(Guid id);
     Task<bool> IsResourceUsedAsync(Guid resourceId);
     Task<bool> IsUnitOfMeasureUsedAsync(Guid unitOfMeasureId);
+    Task<bool> ExistsWithNumberAsync(string documentNumber);
 }

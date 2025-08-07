@@ -9,4 +9,6 @@ public interface IResourceRepository
     Task<bool> ExistsWithNameAsync(string name);
     Task AddAsync(Resource resource);
     Task UpdateAsync(Resource resource);
+    
+    Task DeleteAsync(Guid id);
 }

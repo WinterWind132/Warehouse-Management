@@ -46,4 +46,14 @@ public class ResourceRepository : IResourceRepository
         _context.Resources.Update(dataModel);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task DeleteAsync(Guid id)
+    {
+        var dataModel = await _context.Resources.FindAsync(id);
+        if (dataModel != null)
+        {
+            _context.Resources.Remove(dataModel);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

@@ -9,4 +9,6 @@ public interface IUnitOfMeasureRepository
     Task<bool> ExistsWithNameAsync(string name);
     Task AddAsync(UnitOfMeasure unitOfMeasure);
     Task UpdateAsync(UnitOfMeasure unitOfMeasure);
+    
+    Task DeleteAsync(Guid id);
 }

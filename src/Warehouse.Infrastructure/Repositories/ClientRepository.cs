@@ -46,4 +46,14 @@ public class ClientRepository : IClientRepository
         _context.Clients.Update(dataModel);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task DeleteAsync(Guid id)
+    {
+        var dataModel = await _context.Clients.FindAsync(id);
+        if (dataModel != null)
+        {
+            _context.Clients.Remove(dataModel);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

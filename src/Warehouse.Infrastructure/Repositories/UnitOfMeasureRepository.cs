@@ -46,4 +46,14 @@ public class UnitOfMeasureRepository : IUnitOfMeasureRepository
         _context.UnitOfMeasures.Update(dataModel);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task DeleteAsync(Guid id)
+    {
+        var dataModel = await _context.UnitOfMeasures.FindAsync(id);
+        if (dataModel != null)
+        {
+            _context.UnitOfMeasures.Remove(dataModel);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
