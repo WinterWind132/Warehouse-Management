@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Mapster" Version="7.4.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
@@ -19,6 +20,11 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Warehouse.Application\Warehouse.Application.csproj" />
+      <ProjectReference Include="..\Warehouse.Infrastructure\Warehouse.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

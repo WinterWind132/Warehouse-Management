@@ -1,15 +1,21 @@
+using Application.MappingProfiles;
+using Infrastructure.MappingProfiles;
+using Mapster;
+using MapsterMapper;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var config = new TypeAdapterConfig();
+config.Scan(typeof(ApplicationMappingProfile).Assembly);
+config.Scan(typeof(InfrastructureMappingProfile).Assembly);
+builder.Services.AddSingleton(config);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
