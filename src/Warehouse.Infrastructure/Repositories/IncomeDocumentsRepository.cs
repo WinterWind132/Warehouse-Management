@@ -6,7 +6,7 @@ using Infrastructure.Presistence;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
-namespace Warehouse.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class IncomeDocumentRepository : IIncomeDocumentRepository
     {
@@ -28,6 +28,19 @@ namespace Warehouse.Infrastructure.Repositories
                 .FirstOrDefaultAsync(d => d.Id == id);
 
             return dataModel.Adapt<IncomeDocument>();
+        }
+
+        public async Task<IEnumerable<IncomeDocument>> GetAllAsync()
+        {
+            var dataModels = await _context.IncomeDocuments
+                .Include(d => d.IncomeResources)
+                    .ThenInclude(ir => ir.Resource)
+                .Include(d => d.IncomeResources)
+                    .ThenInclude(ir => ir.UnitOfMeasure)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return dataModels.Adapt<IEnumerable<IncomeDocument>>();
         }
 
         public async Task<IEnumerable<IncomeDocument>> GetAllAsync(IncomeDocumentFilterDto filter)

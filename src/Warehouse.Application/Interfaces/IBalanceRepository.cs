@@ -10,4 +10,5 @@ public interface IBalanceRepository
     Task AddAsync(Balance balance);
     Task UpdateAsync(Balance balance);
     Task AddOrUpdateAsync(Guid resourceId, Guid unitOfMeasureId, decimal quantity);
+    Task<bool> IsUnitOfMeasureUsedAsync(Guid unitOfMeasureId);
 }

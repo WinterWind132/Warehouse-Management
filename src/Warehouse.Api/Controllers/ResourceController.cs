@@ -1,5 +1,10 @@
+using Application.Common;
 using Application.DTO;
-using Application.Services;
+using Application.Resources.Commands.ArchiveResource;
+using Application.Resources.Commands.CreateResource;
+using Application.Resources.Commands.UpdateResource;
+using Application.Resources.Queries.GetResources;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Warehouse.Api.Controllers;
@@ -8,59 +13,84 @@ namespace Warehouse.Api.Controllers;
 [Route("api/[controller]")]
 public class ResourceController : ControllerBase
 {
-    private readonly ResourceService _resourceService;
+    private readonly IMediator _mediator;
 
-    public ResourceController(ResourceService resourceService)
+    public ResourceController(IMediator mediator)
     {
-        _resourceService = resourceService;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ResourceDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<ResourceDto>>> GetAll([FromQuery] string? searchTerm, [FromQuery] bool? isActive)
     {
-        var resources = await _resourceService.GetResourcesAsync();
-        return Ok(resources);
+        var query = new GetResourcesQuery
+        {
+            SearchTerm = searchTerm,
+            IsActive = isActive
+        };
+        
+        var result = await _mediator.Send(query);
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error);
+        }
+        
+        return Ok(result.Value);
     }
 
     [HttpPost]
-    public async Task<ActionResult> AddResource(CreateResourceDto dto)
+    public async Task<ActionResult> Create([FromBody] string name)
     {
-        try
-        {
-            await _resourceService.AddResourceAsync(dto);
-            return Ok();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+        var command = new CreateResourceCommand { Name = name };
+        var result = await _mediator.Send(command);
         
-    [HttpPut]
-    public async Task<ActionResult> UpdateResource(UpdateResourceDto dto)
-    {
-        try
+        if (!result.IsSuccess)
         {
-            await _resourceService.UpdateResourceAsync(dto);
-            return Ok();
+            if (result.ValidationErrors.Any())
+            {
+                return BadRequest(result.ValidationErrors);
+            }
+            return BadRequest(result.Error);
         }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        
+        return Ok();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> ArchiveResource(Guid id)
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Update(Guid id, [FromBody] string name)
     {
-        try
+        var command = new UpdateResourceCommand
         {
-            await _resourceService.ArchiveResourceAsync(id);
-            return Ok();
-        }
-        catch (InvalidOperationException ex)
+            Id = id,
+            Name = name
+        };
+        
+        var result = await _mediator.Send(command);
+        
+        if (!result.IsSuccess)
         {
-            return BadRequest(ex.Message);
+            if (result.ValidationErrors.Any())
+            {
+                return BadRequest(result.ValidationErrors);
+            }
+            return BadRequest(result.Error);
         }
+        
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Archive(Guid id)
+    {
+        var command = new ArchiveResourceCommand { Id = id };
+        var result = await _mediator.Send(command);
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error);
+        }
+        
+        return Ok();
     }
 }

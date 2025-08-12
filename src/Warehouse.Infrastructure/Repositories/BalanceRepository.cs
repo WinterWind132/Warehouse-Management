@@ -80,4 +80,9 @@ public class BalanceRepository : IBalanceRepository
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> IsUnitOfMeasureUsedAsync(Guid unitOfMeasureId)
+        {
+            return await _context.Balances.AnyAsync(b => b.UnitOfMeasureId == unitOfMeasureId);
+        }
     }

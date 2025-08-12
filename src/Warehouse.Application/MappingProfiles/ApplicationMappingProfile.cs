@@ -8,8 +8,6 @@ public class ApplicationMappingProfile : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<CreateResourceDto, Resource>();
-        config.NewConfig<CreateUnitOfMeasureDto, UnitOfMeasure>();
         config.NewConfig<CreateClientDto, Client>();
 
         config.NewConfig<CreateIncomeDocumentDto, IncomeDocument>()

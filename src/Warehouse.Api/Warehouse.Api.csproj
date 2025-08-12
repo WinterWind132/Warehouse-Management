@@ -19,10 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Config\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Warehouse.Application\Warehouse.Application.csproj" />
       <ProjectReference Include="..\Warehouse.Infrastructure\Warehouse.Infrastructure.csproj" />
     </ItemGroup>
